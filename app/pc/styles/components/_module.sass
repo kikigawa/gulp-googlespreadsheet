@@ -1,0 +1,50 @@
+@mixin clearfix
+  &:after
+    content: ""
+    display: table
+    clear: both
+
+
+@mixin image-with-dimensions($path)
+  background-image: image-url($path)
+  width: +image-width($path)
+  height: +image-height($path)
+
+
+@mixin bg-fixed($url,$w,$h,$t-indent:-5000px)
+  background-image: $url
+  width: $w
+  height: $h
+  text-indent: $t-indent
+
+
+@mixin bg-dynamic($url,$w,$h,$t-indent:-5000px, $pos: center center)
+  background-image: $url
+  width: $w
+  height: $h
+  text-indent: $t-indent
+  background-position: $pos
+  // background-size: cover
+  background-size: cover
+
+
+@mixin f-HiraKakuW3($size:14px, $space:0.1em)
+  font-family: "ヒラギノ角ゴ ProN W3", "Hiragino Kaku Gothic ProN", "游ゴシック", YuGothic, "メイリオ", Meiryo, sans-serif
+  font-size: $size
+  letter-spacing: $space
+
+
+@mixin f-HiraKakuW6($size:14px, $space:0.1em)
+  font-family: "ヒラギノ角ゴ ProN W3", "Hiragino Kaku Gothic ProN", "游ゴシック", YuGothic, "メイリオ", Meiryo, sans-serif
+  font-size: $size
+  letter-spacing: $space
+  font-weight: bold
+
+
+@mixin matrix($num)
+  -webkit-transform: $num
+  -moz-transform: $num
+  -o-transform: $num
+  -ms-transform: $num
+  transform: $num
+

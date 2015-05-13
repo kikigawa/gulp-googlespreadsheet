@@ -1,0 +1,31 @@
+doctype html
+html
+  head
+    meta(charset="utf-8")
+    meta(name="keywords" content="キーワード")
+    meta(name="description" content="ディスクリプション")
+
+    // ogp
+    meta(property="og:title" content="タイトル")
+    meta(property="og:url" content="hogehoge.jp")
+    meta(property="og:description" content="ディスクリプション")
+    meta(property="og:image" content="")
+    meta(property="og:locale" content="ja_JP")
+    meta(property="fb:app_id" content="")
+    meta(property="og:type" content="website")
+    meta(property="og:site_name" content="")
+
+    title gulp-tmp
+
+
+
+
+    link( href="/styles/index.css" rel="stylesheet" )
+    script(src="/scripts/vendor.bundle.js", type='text/javascript', charset='UTF-8')
+    script( src="/scripts/index.js" type="text/javascript" )
+
+  body
+    div#container
+      include _header
+      block main
+      include _footer

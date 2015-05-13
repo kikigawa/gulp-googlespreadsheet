@@ -1,0 +1,9 @@
+$sprite-img: sprite-map("sprites-dir/*.png", $layout: smart)
+@import ./common
+
+h1
+  color: #f00
+h2
+  +sprite-replace-text($sprite-img, sample, true)
+
+
