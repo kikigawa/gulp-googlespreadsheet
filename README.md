@@ -1,0 +1,2 @@
+# gulp-googlespreadsheet
+gulpでgoogle spreadsheetの情報からhtmlいっぱい生成する
