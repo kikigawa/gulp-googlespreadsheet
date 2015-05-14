@@ -5,14 +5,9 @@ Config      = require '../utils/config'
 a           = path.forApp
 b           = path.forBuild
 
+Text = require "./text.coffee"
+
 gulp.task 'default', ->
-  console.log '/////////////////////////'
-  console.log '/////////////////////////'
-  console.log '////////default//////////'
-  console.log '/////////////////////////'
-  console.log '/////////////////////////'
-
-
   runSequence 'clean', 'copy', 'jade','styles','scripts', 'delete', 'browser-sync'
 
 gulp.task 'watch', ['default'],  ->
@@ -24,5 +19,8 @@ gulp.task 'watch', ['default'],  ->
 
 
 gulp.task 'text', ->
-  runSequence 'text'
+  text = new Text()
+
+  text.start()
+  # runSequence 'text'
 

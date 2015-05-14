@@ -25,7 +25,8 @@
     "run-sequence": "~1.0.2",
     "webpack": "~1.5.3",
     "webpack-dev-server": "~1.7.0",
-    "gulp-copy": "0.0.2"
+    "gulp-copy": "0.0.2",
+    "googleapis": "~0.8.0"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -34,7 +35,7 @@
     "type": "git",
     "url": "git://github.com/kikigawa/gulp.git"
   },
-  "author": "",
+  "author": "kiki",
   "license": "BSD-2-Clause",
   "bugs": {
     "url": "https://github.com/kikigawa/gulp/issues"
