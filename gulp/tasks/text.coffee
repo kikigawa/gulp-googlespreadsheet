@@ -5,7 +5,8 @@
 # del         = require 'del'
 fs          = require("fs")
 readline    = require('readline')
-googleapis        = require('googleapis')
+googleapis  = require('googleapis')
+yaml        = require('json2yaml')
 
 CLIENT_ID = '900708937402-r49gl85k281p09ip1gaiiakrefom3mf1.apps.googleusercontent.com'
 CLIENT_SECRET = 'Q4GaIXLODndlu4578pZjRUhd'
@@ -20,6 +21,7 @@ class Text
     @pageCursor = 1
     # @data = {"aaa":"112aaaaaaaaaa"}
     @data = []
+    @obj = {}
 
 
   start: =>
@@ -29,7 +31,7 @@ class Text
     )
     @auth = new googleapis.OAuth2Client(CLIENT_ID, CLIENT_SECRET, REDIRECT_URL)
     @readToken(@readTokenCompleted)
-    # @GenerateJson()
+    # @generateYaml()
 
 
   readToken: (callback) =>
@@ -69,22 +71,56 @@ class Text
     if err
       console.log err
     entry = body.feed.entry
-    i = 0
-    while i < entry.length
-      console.log '', entry[i]
-      # @data.push entry[i]
-      @GenerateJson(entry[i])
-      i++
+    # @generateYaml(entry)
+    # i = 0
+    for i in [0..entry.length-1]
+      dir = entry[i]
+      type = dir.title.$t.substring(0, 1)
+
+      switch(type)
+        when 'B'
+          key = dir.title.$t
+          B = dir.content.$t
+          url = B+'/'
+
+        when 'C'
+          key = dir.title.$t
+          C = dir.content.$t
+          url = B+'/'+C+'/'
+
+        when 'D'
+          key = dir.title.$t
+          D = dir.content.$t
+          url = B+'/'+C+'/'+D+'/'
+
+      @generateObj(key, url)
+    # @generateYaml(entry[0])
+
+  generateObj: (key, url)=>
+    @obj[key] = url
+    console.log '================='
+    console.log @obj
+    console.log '================='
+
+    # console.log data
+
+    @generateYaml(@obj)
 
 
 
 
 
-  GenerateJson: (data)=>
-    fs.writeFile('./app/common/data/test.json', JSON.stringify(data), ->
+
+
+
+  generateYaml: (data)=>
+    fs.writeFile('./gulp/data/url.json', JSON.stringify(data), ->
       console.log 'Generated text!'
     )
-    # fs.writeFile('./app/common/data/test.json', JSON.stringify(@data[1].content.$t), ->
+    # fs.writeFile('./gulp/data/url.yml', yaml.stringify(data), ->
+    #   console.log 'Generated text!'
+    # )
+    # fs.writeFile('./app/common/data/url.json', JSON.stringify(@data[1].content.$t), ->
     #   console.log 'Generated text!'
     # )
 

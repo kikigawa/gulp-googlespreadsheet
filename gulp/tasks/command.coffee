@@ -8,7 +8,7 @@ b           = path.forBuild
 Text = require "./text.coffee"
 
 gulp.task 'default', ->
-  runSequence 'clean', 'copy', 'jade','styles','scripts', 'delete', 'browser-sync'
+  runSequence 'clean', 'copy', 'jade', 'styles','scripts',  'delete', 'browser-sync'
 
 gulp.task 'watch', ['default'],  ->
 
