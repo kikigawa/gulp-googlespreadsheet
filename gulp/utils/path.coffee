@@ -4,7 +4,13 @@ class UA
   constructor: ->
     @forApp = null
     @forBuild = null
-    @initPath(gutil.env.type)
+    @page = null
+    @
+    if gutil.env.type
+      @initPath(gutil.env.type)
+
+    if gutil.env.ss
+      @chceckSpreadsheet(gutil.env.ss)
 
 
   initPath:(e) =>
@@ -17,6 +23,10 @@ class UA
     if e is 'yt_test'
       @forApp = '/yt_test/'
       @forBuild = '/yt_test/'
+
+  chceckSpreadsheet: (e)=>
+    @page = e
+
 
 
 module.exports = new UA()

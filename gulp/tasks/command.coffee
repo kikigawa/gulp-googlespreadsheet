@@ -4,6 +4,7 @@ runSequence = require 'run-sequence'
 Config      = require '../utils/config'
 a           = path.forApp
 b           = path.forBuild
+page        = path.page
 
 Text = require "./text.coffee"
 
@@ -21,6 +22,6 @@ gulp.task 'watch', ['default'],  ->
 gulp.task 'text', ->
   text = new Text()
 
-  text.start()
+  text.start(page)
   # runSequence 'text'
 

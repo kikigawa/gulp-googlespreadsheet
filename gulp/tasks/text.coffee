@@ -8,23 +8,33 @@ readline    = require('readline')
 googleapis  = require('googleapis')
 yaml        = require('json2yaml')
 
+Hotoke      = require "./generateJson/hotoke.coffee"
+
+
 CLIENT_ID = '900708937402-r49gl85k281p09ip1gaiiakrefom3mf1.apps.googleusercontent.com'
 CLIENT_SECRET = 'Q4GaIXLODndlu4578pZjRUhd'
 REDIRECT_URL = 'urn:ietf:wg:oauth:2.0:oob'
 SCOPE = 'https://spreadsheets.google.com/feeds'
 TOKENS_FILEPATH = "./tokens.json"
 
+NAME = [
+  'hotoke'
+]
+
 
 
 class Text
   constructor: ->
+    Hotoke = new Hotoke()
     @pageCursor = 1
     # @data = {"aaa":"112aaaaaaaaaa"}
     @data = []
     @obj = {}
+    @page = null
 
 
-  start: =>
+  start: (page)=>
+    @page = page
     @rl = readline.createInterface(
       input: process.stdin
       output: process.stdout
@@ -48,11 +58,11 @@ class Text
       @getAccessToken(=>
         # @saveToken()
         # @parsePages()
-        @getListRow(@callback)
+        @getListRow(@value)
       )
     else
       # @parsePages()
-      @getListRow(@callback)
+      @getListRow(@value)
     return
 
   # parsePages: =>
@@ -61,49 +71,29 @@ class Text
 
   getListRow: (callback)=>
     console.log 'getListRow'
-    spreadsheetsKey = '1ySjxwDwM4S8fVnSqqG1FXmJxfi61G9TezhiFCP2LMMA'
+    console.log @page
+    # spreadsheetsKey = '1ySjxwDwM4S8fVnSqqG1FXmJxfi61G9TezhiFCP2LMMA'
+    spreadsheetsKey = '10RLsfmzuHnIpV21jtwKfw5m0OpmZ2mvOaTUkPexdO5U'
+    # if @page = 'hotoke'
+    #   page = 'od6'
+
     opts = url: SCOPE + '/cells/' + spreadsheetsKey + '/od6/private/basic?alt=json'
+    # test = url: SCOPE + '/cells/' + spreadsheetsKey + '/od7/private/basic?alt=json'
     @auth.request opts, callback
+    # @auth.request opts, Hotoke.value()
 
 
 
-  callback: (err, body, res) =>
+  value: (err, body, res) =>
     if err
       console.log err
     entry = body.feed.entry
-    # @generateYaml(entry)
-    # i = 0
-    for i in [0..entry.length-1]
-      dir = entry[i]
-      type = dir.title.$t.substring(0, 1)
 
-      switch(type)
-        when 'B'
-          key = dir.title.$t
-          B = dir.content.$t
-          url = B+'/'
+    Hotoke.value(err, body, res, entry, @generateObj)
 
-        when 'C'
-          key = dir.title.$t
-          C = dir.content.$t
-          url = B+'/'+C+'/'
-
-        when 'D'
-          key = dir.title.$t
-          D = dir.content.$t
-          url = B+'/'+C+'/'+D+'/'
-
-      @generateObj(key, url)
-    # @generateYaml(entry[0])
 
   generateObj: (key, url)=>
     @obj[key] = url
-    console.log '================='
-    console.log @obj
-    console.log '================='
-
-    # console.log data
-
     @generateYaml(@obj)
 
 
@@ -114,27 +104,13 @@ class Text
 
 
   generateYaml: (data)=>
-    fs.writeFile('./gulp/data/url.json', JSON.stringify(data), ->
+    fs.writeFile('./gulp/data/'+NAME[0]+'.json', JSON.stringify(data), ->
       console.log 'Generated text!'
     )
-    # fs.writeFile('./gulp/data/url.yml', yaml.stringify(data), ->
-    #   console.log 'Generated text!'
-    # )
-    # fs.writeFile('./app/common/data/url.json', JSON.stringify(@data[1].content.$t), ->
-    #   console.log 'Generated text!'
-    # )
+    fs.writeFile('./gulp/data/'+NAME[0]+'.yml', yaml.stringify(data), ->
+      console.log 'Generated text!'
+    )
 
-
-
-
-  # callback = (err, body, res) ->
-  #   if err
-  #     console.log err
-  #   entry = body.feed.entry
-  #   i = 0
-  #   while i < entry.length
-  #     console.log '', entry[i]
-  #     i++
 
 
 
