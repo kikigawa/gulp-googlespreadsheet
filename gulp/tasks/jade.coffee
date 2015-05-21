@@ -11,21 +11,43 @@ urls         = require '../../gulp/data/url.json'
 
 
 
+# gulp.task 'roop', (cb)->
+#   a = path.forApp
+#   b = path.forBuild
+#   console.log a
+#   console.log b
+#   for key of urls
+#     url = urls[key]
+#     console.log url
+#     gulp.src('./app'+a+'layouts/index.jade')
+#       .pipe plumber()
+#       .pipe jade
+#         pretty: true
+#       .on "error", gutil.log
+#       .pipe gulp.dest('./build/'+b+url)
+#       .pipe bSync.reload stream: true
+#   cb()
+
 gulp.task 'roop', (cb)->
   a = path.forApp
   b = path.forBuild
   console.log a
   console.log b
-  for key of urls
-    url = urls[key]
-    console.log url
-    gulp.src('./app'+a+'layouts/index.jade')
-      .pipe plumber()
-      .pipe jade
-        pretty: true
-      .on "error", gutil.log
-      .pipe gulp.dest('./build/'+b+url)
-      .pipe bSync.reload stream: true
+
+  gulp.src('./app'+a+'layouts/index.jade')
+    .pipe plumber()
+    .pipe data (file) ->
+      dp  = '../utils/data.coffee'
+      return require '../data/hotoke.json'
+    #   out = require(dp)(file)
+    #   # delete require.cache[ path.resolve(dp) ]
+    #   return out
+
+    .pipe jade
+      pretty: true
+    .on "error", gutil.log
+    .pipe gulp.dest('./build/'+b)
+    .pipe bSync.reload stream: true
   cb()
 
 gulp.task 'jade', (cb)->

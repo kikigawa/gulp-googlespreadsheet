@@ -1,4 +1,5 @@
 path    = require 'path'
+hotoke  = require '../data/url.json'
 
 
 
@@ -13,7 +14,8 @@ module.exports = (file) ->
     relative  = "."
 
   data =
-    id: name
-    root: relative
+    # id: name
+    # root: relative
+    pickup: hotoke
 
   return data

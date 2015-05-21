@@ -1,9 +1,37 @@
 $sprite-img: sprite-map("sprites-dir/*.png", $layout: smart)
 @import ./common
 
-h1
-  color: #f00
-h2
-  +sprite-replace-text($sprite-img, sample, true)
 
-
+#container
+  h1
+    color: #f00
+  h2
+    +sprite-replace-text($sprite-img, sample, true)
+  $w: 100%, 50%, 25%
+  @for $i from 1 through 3
+    .pickup-#{$i}
+      width: 100%
+      height: 300px
+      +clearfix
+      a
+        display: table
+        position: relative
+        text-decoration: none
+        width: #{nth($w,$i)}
+        height: 100%
+        float: left
+        img
+          position: absolute
+          z-index: -10
+        .center
+          display: table-cell
+          vertical-align: middle
+        h3,h4
+          position: relative
+          text-align: center
+          color: #fff
+        h4
+          margin-top: 30px
+        &:hover
+          img
+            +opacity(0.5)

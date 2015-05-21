@@ -25,40 +25,56 @@ class Hotoke
     console.log 'HOTOKE'
 
   value: (err, body, res, entry, callback)=>
-    console.log 'Hotoke value'
-    console.log '==================='
-    console.log entry
-    console.log '==================='
-    # callback(key, url)
+
     for i in [0..entry.length-1]
       dir = entry[i]
       type = dir.title.$t.substring(0, 1)
 
       switch(type)
+        when 'A'
+          parent = dir.content.$t
+          if parent is 'pickup'
+            check = true
+            pickup = {}
+
         when 'B'
-          if dir.content.$t is 'item'
-            key = dir.title.$t
+          if check is true
+            item = {}
 
-        # when 'C'
+        when 'C'
+          if check is true
+            value = dir.content.$t
+            item.title = value
+
+        when 'D'
+          if check is true
+            value = dir.content.$t
+            item.subtitle = value
+
+        when 'E'
+          if check is true
+            value = dir.content.$t
+            item.url = value
+
+        when 'F'
+          if check is true
+            value = dir.content.$t
+            item.target = value
+
+        when 'G'
+          if check is true
+            value = dir.content.$t
+            key = value
+            item.id = value
+
+        when 'H'
+          if check is true
+            value = dir.content.$t
+            item.type = value
+            pickup[key] = item
 
 
-      # switch(type)
-      #   when 'B'
-      #     key = dir.title.$t
-      #     B = dir.content.$t
-      #     url = B+'/'
-
-      #   when 'C'
-      #     key = dir.title.$t
-      #     C = dir.content.$t
-      #     url = B+'/'+C+'/'
-
-      #   when 'D'
-      #     key = dir.title.$t
-      #     D = dir.content.$t
-      #     url = B+'/'+C+'/'+D+'/'
-
-      callback(key, url)
+    callback('pickup', pickup)
 
 
 

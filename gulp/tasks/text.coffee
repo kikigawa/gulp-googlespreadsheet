@@ -92,8 +92,9 @@ class Text
     Hotoke.value(err, body, res, entry, @generateObj)
 
 
-  generateObj: (key, url)=>
-    @obj[key] = url
+  generateObj: (key, value)=>
+    @obj[key] = value
+    console.log Object.keys(@obj[key]).length
     @generateYaml(@obj)
 
 
@@ -104,6 +105,12 @@ class Text
 
 
   generateYaml: (data)=>
+    # fs.writeFile('./data/'+NAME[0]+'.json', JSON.stringify(data), ->
+    #   console.log 'Generated text!'
+    # )
+    # fs.writeFile('./data/'+NAME[0]+'.yml', yaml.stringify(data), ->
+    #   console.log 'Generated text!'
+    # )
     fs.writeFile('./gulp/data/'+NAME[0]+'.json', JSON.stringify(data), ->
       console.log 'Generated text!'
     )
