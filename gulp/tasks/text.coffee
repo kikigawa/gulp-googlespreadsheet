@@ -27,7 +27,6 @@ class Text
   constructor: ->
     Hotoke = new Hotoke()
     @pageCursor = 1
-    # @data = {"aaa":"112aaaaaaaaaa"}
     @data = []
     @obj = {}
     @page = null
@@ -41,7 +40,6 @@ class Text
     )
     @auth = new googleapis.OAuth2Client(CLIENT_ID, CLIENT_SECRET, REDIRECT_URL)
     @readToken(@readTokenCompleted)
-    # @generateYaml()
 
 
   readToken: (callback) =>
@@ -65,22 +63,14 @@ class Text
       @getListRow(@value)
     return
 
-  # parsePages: =>
-    # @getListRow(('od6', @getcallback(PAGES[@pageCursor-1]))
-
 
   getListRow: (callback)=>
     console.log 'getListRow'
     console.log @page
-    # spreadsheetsKey = '1ySjxwDwM4S8fVnSqqG1FXmJxfi61G9TezhiFCP2LMMA'
     spreadsheetsKey = '10RLsfmzuHnIpV21jtwKfw5m0OpmZ2mvOaTUkPexdO5U'
-    # if @page = 'hotoke'
-    #   page = 'od6'
 
     opts = url: SCOPE + '/cells/' + spreadsheetsKey + '/od6/private/basic?alt=json'
-    # test = url: SCOPE + '/cells/' + spreadsheetsKey + '/od7/private/basic?alt=json'
     @auth.request opts, callback
-    # @auth.request opts, Hotoke.value()
 
 
 
@@ -105,12 +95,6 @@ class Text
 
 
   generateYaml: (data)=>
-    # fs.writeFile('./data/'+NAME[0]+'.json', JSON.stringify(data), ->
-    #   console.log 'Generated text!'
-    # )
-    # fs.writeFile('./data/'+NAME[0]+'.yml', yaml.stringify(data), ->
-    #   console.log 'Generated text!'
-    # )
     fs.writeFile('./gulp/data/'+NAME[0]+'.json', JSON.stringify(data), ->
       console.log 'Generated text!'
     )
