@@ -2,22 +2,23 @@ extends partials/_frame
 block main
   h1 gulp-tmp
   h2 images
-  - var items = locals.pickup
+  - var items = locals.parent.info
   - var item = Object.keys(items)
-  - var i = 1
-  while i <= 3
-    div(class="pickup pickup-#{i}")
-      each index, n in item
-        - var id = String(index)
-        - var type = items[id].type
-        - var title = items[id].title.replace('<br_pc>','<br>')
-        - var subtitle = items[id].subtitle.replace('<br_pc>','<br>')
-        if type == i
-          a(id="#{index}" href="#{items[id].url}" target="#{items[id].target}")
-            img(src="./images/hotoke/pickup/#{type}/#{index}.jpg")
-            .center
-              h3 !{title}
-              h4 !{subtitle}
-    - i++
+  h3 #{item}
+  //- - var i = 1
+  //- while i <= 3
+  //-   div(class="pickup pickup-#{i}")
+  //-     each index, n in item
+  //-       - var id = String(index)
+  //-       - var type = items[id].type
+  //-       - var title = items[id].title.replace('<br_pc>','<br>')
+  //-       - var subtitle = items[id].subtitle.replace('<br_pc>','<br>')
+  //-       if type == i
+  //-         a(id="#{index}" href="#{items[id].url}" target="#{items[id].target}")
+  //-           img(src="./images/hotoke/pickup/#{type}/#{index}.jpg")
+  //-           .center
+  //-             h3 !{title}
+  //-             h4 !{subtitle}
+  //-   - i++
 
 

@@ -14,8 +14,11 @@ module.exports = (file) ->
     relative  = "."
 
   data =
+    pickup: hotoke
     # id: name
     # root: relative
-    pickup: hotoke
+
+  aaa = 'aaaaa'
+
 
   return data

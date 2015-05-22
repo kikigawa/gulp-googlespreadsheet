@@ -6,8 +6,10 @@ Config      = require "../utils/config.coffee"
 gutil       = require "gulp-util"
 data        = require 'gulp-data'
 jade        = require 'gulp-jade'
+rename      = require 'gulp-rename'
 bSync       = require './browserSync'
-urls         = require '../../gulp/data/url.json'
+# urls         = require '../../gulp/data/url.json'
+parentJson  = require '../../gulp/data/parent.json'
 
 
 
@@ -28,21 +30,20 @@ urls         = require '../../gulp/data/url.json'
 #       .pipe bSync.reload stream: true
 #   cb()
 
-gulp.task 'roop', (cb)->
+
+gulp.task 'jade', (cb)->
+  runSequence 'hotoke', 'parent', cb
+
+
+
+gulp.task 'hotoke',  (cb)->
   a = path.forApp
   b = path.forBuild
-  console.log a
-  console.log b
-
   gulp.src('./app'+a+'layouts/index.jade')
     .pipe plumber()
     .pipe data (file) ->
       dp  = '../utils/data.coffee'
       return require '../data/hotoke.json'
-    #   out = require(dp)(file)
-    #   # delete require.cache[ path.resolve(dp) ]
-    #   return out
-
     .pipe jade
       pretty: true
     .on "error", gutil.log
@@ -50,8 +51,60 @@ gulp.task 'roop', (cb)->
     .pipe bSync.reload stream: true
   cb()
 
-gulp.task 'jade', (cb)->
-  runSequence 'roop', cb
+
+
+gulp.task 'parent', (cb)->
+  a = path.forApp
+  b = path.forBuild
+
+  dirArr = Object.keys(parentJson.parent)
+  console.log dirArr
+
+  for i in [0..dirArr.length-1]
+    dir = dirArr[i]
+
+
+    gulp.src('./app'+a+'layouts/parent.jade')
+      .pipe plumber()
+      .pipe data (file) ->
+        dp  = '../utils/data.coffee'
+        return require '../data/parent.json'
+      .pipe jade
+        pretty: true
+      .on "error", gutil.log
+      .pipe rename('index.html')
+      .pipe gulp.dest('./build/'+b+dir)
+      .pipe bSync.reload stream: true
+  cb()
+
+
+
+
+
+# gulp.task 'parent', (cb)->
+#   a = path.forApp
+#   b = path.forBuild
+
+#   dirArr = Object.keys(parentJson.parent)
+
+#   for i in [0..dirArr.length-1]
+#     dir = dirArr[i]
+
+
+#   gulp.src('./app'+a+'layouts/parent.jade')
+#     .pipe plumber()
+#     .pipe data (file) ->
+#       dp  = '../utils/data.coffee'
+#       return require '../data/parent.json'
+#     #   out = require(dp)(file)
+#     #   # delete require.cache[ path.resolve(dp) ]
+#     #   return out
+#     .pipe jade
+#       pretty: true
+#     .on "error", gutil.log
+#     .pipe gulp.dest('./build/'+b)
+#     .pipe bSync.reload stream: true
+#   cb()
 
 
 

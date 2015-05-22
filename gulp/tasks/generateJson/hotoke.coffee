@@ -8,12 +8,6 @@ readline    = require('readline')
 googleapis  = require('googleapis')
 yaml        = require('json2yaml')
 
-CLIENT_ID = '900708937402-r49gl85k281p09ip1gaiiakrefom3mf1.apps.googleusercontent.com'
-CLIENT_SECRET = 'Q4GaIXLODndlu4578pZjRUhd'
-REDIRECT_URL = 'urn:ietf:wg:oauth:2.0:oob'
-SCOPE = 'https://spreadsheets.google.com/feeds'
-TOKENS_FILEPATH = "./tokens.json"
-
 NAME = [
   'hotoke'
 ]

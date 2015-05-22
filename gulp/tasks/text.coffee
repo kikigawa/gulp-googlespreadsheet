@@ -9,6 +9,7 @@ googleapis  = require('googleapis')
 yaml        = require('json2yaml')
 
 Hotoke      = require "./generateJson/hotoke.coffee"
+Parent      = require "./generateJson/parent.coffee"
 
 
 CLIENT_ID = '900708937402-r49gl85k281p09ip1gaiiakrefom3mf1.apps.googleusercontent.com'
@@ -26,6 +27,7 @@ NAME = [
 class Text
   constructor: ->
     Hotoke = new Hotoke()
+    Parent = new Parent()
     @pageCursor = 1
     @data = []
     @obj = {}
@@ -66,10 +68,12 @@ class Text
 
   getListRow: (callback)=>
     console.log 'getListRow'
-    console.log @page
     spreadsheetsKey = '10RLsfmzuHnIpV21jtwKfw5m0OpmZ2mvOaTUkPexdO5U'
 
-    opts = url: SCOPE + '/cells/' + spreadsheetsKey + '/od6/private/basic?alt=json'
+    if @page is 'hotoke' then p = 'od6'
+    if @page is 'parent' then p = '2'
+
+    opts = url: SCOPE + '/cells/' + spreadsheetsKey + '/'+p+'/private/basic?alt=json'
     @auth.request opts, callback
 
 
@@ -79,8 +83,11 @@ class Text
       console.log err
     entry = body.feed.entry
 
-    Hotoke.value(err, body, res, entry, @generateObj)
+    if @page is 'hotoke'
+      Hotoke.value(err, body, res, entry, @generateObj)
 
+    if @page is 'parent'
+      Parent.value(err, body, res, entry, @generateObj)
 
   generateObj: (key, value)=>
     @obj[key] = value
@@ -95,10 +102,10 @@ class Text
 
 
   generateYaml: (data)=>
-    fs.writeFile('./gulp/data/'+NAME[0]+'.json', JSON.stringify(data), ->
+    fs.writeFile('./gulp/data/'+@page+'.json', JSON.stringify(data), ->
       console.log 'Generated text!'
     )
-    fs.writeFile('./gulp/data/'+NAME[0]+'.yml', yaml.stringify(data), ->
+    fs.writeFile('./gulp/data/'+@page+'.yml', yaml.stringify(data), ->
       console.log 'Generated text!'
     )
 

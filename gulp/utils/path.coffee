@@ -9,8 +9,8 @@ class UA
     if gutil.env.type
       @initPath(gutil.env.type)
 
-    if gutil.env.ss
-      @chceckSpreadsheet(gutil.env.ss)
+    if gutil.env.type
+      @chceckSpreadsheet(gutil.env.type)
 
 
   initPath:(e) =>
