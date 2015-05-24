@@ -8,8 +8,9 @@ data        = require 'gulp-data'
 jade        = require 'gulp-jade'
 rename      = require 'gulp-rename'
 bSync       = require './browserSync'
+
 # urls         = require '../../gulp/data/url.json'
-parentJson  = require '../../gulp/data/parent.json'
+parentJson  = require '../data/parent.json'
 
 
 
@@ -58,8 +59,6 @@ gulp.task 'parent', (cb)->
   b = path.forBuild
 
   dirArr = Object.keys(parentJson.parent)
-  console.log dirArr
-
   for i in [0..dirArr.length-1]
     dir = dirArr[i]
 
@@ -67,8 +66,11 @@ gulp.task 'parent', (cb)->
     gulp.src('./app'+a+'layouts/parent.jade')
       .pipe plumber()
       .pipe data (file) ->
+
         dp  = '../utils/data.coffee'
-        return require '../data/parent.json'
+        out = require(dp)(file)
+        return out
+        # return parentJson
       .pipe jade
         pretty: true
       .on "error", gutil.log

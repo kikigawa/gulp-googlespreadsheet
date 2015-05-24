@@ -1,24 +1,29 @@
-path    = require 'path'
-hotoke  = require '../data/url.json'
+path        = require 'path'
+parentJson  = require '../data/parent.json'
 
 
+i = 0
 
 module.exports = (file) ->
-  root      = "/Users/Kiki/Documents/works/quiksilver/repos/app/pc/layouts/"
-  dir       = path.dirname file.path
-  relative  = path.relative dir, root
-  name      = path.relative(root, dir)
+  # root      = "/Users/Kiki/Documents/works/quiksilver/repos/app/pc/layouts/"
+  # dir       = path.dirname file.path
+  # relative  = path.relative dir, root
+  # name      = path.relative(root, dir)
 
-  if name is ""
-    name      = "index"
-    relative  = "."
-
+  # if name is ""
+  #   name      = "index"
+  #   relative  = "."
+  console.log i
+  dirArr = Object.keys(parentJson.parent)
+  dir = dirArr[i]
   data =
-    pickup: hotoke
-    # id: name
-    # root: relative
+    parent: parentJson
+    url: dir
 
-  aaa = 'aaaaa'
+  i++
+  if i >= dirArr.length
+    i = 0
+
 
 
   return data
