@@ -8,9 +8,11 @@ data        = require 'gulp-data'
 jade        = require 'gulp-jade'
 rename      = require 'gulp-rename'
 bSync       = require './browserSync'
+merge       = require('merge-stream')
 
 # urls         = require '../../gulp/data/url.json'
 parentJson  = require '../data/parent.json'
+childJson  = require '../data/child.json'
 
 
 
@@ -31,106 +33,79 @@ parentJson  = require '../data/parent.json'
 #       .pipe bSync.reload stream: true
 #   cb()
 
+@a = null
+@b = null
 
 gulp.task 'jade', (cb)->
-  runSequence 'hotoke', 'parent', cb
+  @a = path.forApp
+  @b = path.forBuild
+  runSequence 'hotoke', 'parent', 'child', cb
 
 
 
 gulp.task 'hotoke',  (cb)->
-  a = path.forApp
-  b = path.forBuild
-  gulp.src('./app'+a+'layouts/index.jade')
+  gulp.src('./app'+@a+'layouts/index.jade')
     .pipe plumber()
     .pipe data (file) ->
       dp  = '../utils/data.coffee'
-      return require '../data/hotoke.json'
+      out = require(dp)(file, '', '')
+      return out
+      # return require '../data/hotoke.json'
     .pipe jade
       pretty: true
     .on "error", gutil.log
-    .pipe gulp.dest('./build/'+b)
+    .pipe gulp.dest('./build/'+@b)
     .pipe bSync.reload stream: true
   cb()
 
 
 
+
 gulp.task 'parent', (cb)->
-  a = path.forApp
-  b = path.forBuild
-
   dirArr = Object.keys(parentJson.parent)
-  for i in [0..dirArr.length-1]
-    dir = dirArr[i]
-
-
+  merge dirArr.map (dir) ->
+    a = path.forApp
+    b = path.forBuild
     gulp.src('./app'+a+'layouts/parent.jade')
       .pipe plumber()
       .pipe data (file) ->
-
         dp  = '../utils/data.coffee'
-        out = require(dp)(file)
+        out = require(dp)(file, dir+'/', dir)
         return out
-        # return parentJson
       .pipe jade
         pretty: true
       .on "error", gutil.log
       .pipe rename('index.html')
       .pipe gulp.dest('./build/'+b+dir)
       .pipe bSync.reload stream: true
+
   cb()
 
 
 
 
 
-# gulp.task 'parent', (cb)->
-#   a = path.forApp
-#   b = path.forBuild
-
-#   dirArr = Object.keys(parentJson.parent)
-
-#   for i in [0..dirArr.length-1]
-#     dir = dirArr[i]
-
-
-#   gulp.src('./app'+a+'layouts/parent.jade')
-#     .pipe plumber()
-#     .pipe data (file) ->
-#       dp  = '../utils/data.coffee'
-#       return require '../data/parent.json'
-#     #   out = require(dp)(file)
-#     #   # delete require.cache[ path.resolve(dp) ]
-#     #   return out
-#     .pipe jade
-#       pretty: true
-#     .on "error", gutil.log
-#     .pipe gulp.dest('./build/'+b)
-#     .pipe bSync.reload stream: true
-#   cb()
-
-
-
-
-
-
-
-
-# gulp.task 'jade', (cb)->
-#   a = path.forApp
-#   b = path.forBuild
-
-
-#   gulp.src('./app'+a+'layouts/index.jade')
-#     .pipe plumber()
-#     .pipe jade
-#       pretty: true
-#     .on "error", gutil.log
-#     .on 'end', ->
-#       for key of urls
-#         url = urls[key]
-#         console.log url
-#     .pipe gulp.dest('./build/'+b+url)
-#     .pipe bSync.reload stream: true
+gulp.task 'child', (cb)->
+  parentArr = Object.keys(childJson.child)
+  merge parentArr.map (parent) ->
+    dirArr = Object.keys(childJson.child[parent])
+    merge dirArr.map (dir) ->
+      a = path.forApp
+      b = path.forBuild
+      gulp.src('./app'+a+'layouts/child.jade')
+        .pipe plumber()
+        .pipe data (file) ->
+          dp  = '../utils/data.coffee'
+          out = require(dp)(file, parent+'/'+dir+'/', dir)
+          return out
+          # return childJson
+        .pipe jade
+          pretty: true
+        .on "error", gutil.log
+        .pipe rename('index.html')
+        .pipe gulp.dest('./build/'+b+parent+'/'+dir)
+        .pipe bSync.reload stream: true
+  cb()
 
 
 

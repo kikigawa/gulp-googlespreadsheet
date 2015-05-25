@@ -1,23 +1,20 @@
 extends partials/_frame
 block main
-  h1 gulp-tmp
-  //- - var items = locals.parent
-  //- - var item = Object.keys(items)
-  //- - var page = 
-  - var u = locals.url
-  - var items = locals.parent.parent[u]
+  h1 PARENT
+  - var id = locals.id
+  - var items = locals.parent.parent[id]
   - var item = Object.keys(items)
-  //- - var url = window.location.pathname
 
   each index, n in item
     - var id = String(index)
     - var tag = items[id].tag
     - var title = items[id].title
     - var text = items[id].text
-    h3 #{id}
-    p #{tag}
-    p #{title}
-    p #{text}
+    a(href="./#{id}" style="margin-top:50px; display:block;")
+      h3 #{id}
+      p #{tag}
+      p #{title}
+      p #{text}
 
 
   //- - var items = locals.parent

@@ -1,0 +1,32 @@
+extends partials/_frame
+block main
+  h1 CHILD
+  - var currentUrl = locals.currentUrl
+  - var parent     = currentUrl.split('/')[0]
+  - var id         = locals.id
+  - var items      = locals.child.child[parent][id]
+  - var item       = Object.keys(items)
+  h3 currentUrl = #{currentUrl}
+  h3 parent = #{parent}
+  h3 ID = #{id}
+  h3 item = #{item}
+
+  each index, i in item
+    a(href="./#{index}/" style="display:block; margin-top:50px;")
+      p #{items[index].title}
+      p #{items[index].text}
+
+
+
+
+
+  //- - var parent = locals.parentD
+  //- - var child = locals.childD
+
+  //- - var items = locals.child.child[parent]
+  //- - var item = Object.keys(items)
+
+  //- h3 parent = #{parent}
+  //- h3 child = #{child}
+  //- h3 #{item}
+

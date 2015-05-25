@@ -1,28 +1,57 @@
 path        = require 'path'
+hotokeJson  = require '../data/hotoke.json'
 parentJson  = require '../data/parent.json'
+childJson  = require '../data/child.json'
 
 
-i = 0
+p = 0
+c = 0
 
-module.exports = (file) ->
-  # root      = "/Users/Kiki/Documents/works/quiksilver/repos/app/pc/layouts/"
-  # dir       = path.dirname file.path
-  # relative  = path.relative dir, root
-  # name      = path.relative(root, dir)
 
-  # if name is ""
-  #   name      = "index"
-  #   relative  = "."
-  console.log i
-  dirArr = Object.keys(parentJson.parent)
-  dir = dirArr[i]
-  data =
-    parent: parentJson
-    url: dir
+module.exports = (file, url, ID) ->
 
-  i++
-  if i >= dirArr.length
+  tmp = String(file.history).split('/')
+  layout = tmp[tmp.length-1].split('.')[0]
+
+  parentArr = Object.keys(parentJson.parent)
+  parentDir = parentArr[p]
+
+  childArr = Object.keys(childJson.child)
+  childDir = childArr[c]
+
+  ori = ''
+  upper = '../'
+  dirLv = url.split('/').length-1
+  if dirLv is 0
+    ori = './'
+  else
     i = 0
+    while i < dirLv
+      ori = ori+upper
+      i++
+
+
+
+
+  data =
+    hotoke: hotokeJson
+    parent: parentJson
+    child:  childJson
+    currentUrl: url
+    id: ID
+    root: ori
+
+
+
+  if layout is 'parent'
+    p++
+    if p >= parentArr.length
+      p = 0
+
+  if layout is 'child'
+    c++
+    if c >= childArr.length
+      c = 0
 
 
 
