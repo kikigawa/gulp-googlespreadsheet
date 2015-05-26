@@ -11,6 +11,7 @@ yaml        = require('json2yaml')
 Hotoke      = require "./generateJson/hotoke.coffee"
 Parent      = require "./generateJson/parent.coffee"
 Child       = require "./generateJson/child.coffee"
+Grandson    = require "./generateJson/grandson.coffee"
 
 
 CLIENT_ID = '900708937402-r49gl85k281p09ip1gaiiakrefom3mf1.apps.googleusercontent.com'
@@ -27,13 +28,14 @@ NAME = [
 
 class Text
   constructor: ->
-    Hotoke = new Hotoke()
-    Parent = new Parent()
-    Child = new Child()
-    @pageCursor = 1
-    @data = []
-    @obj = {}
-    @page = null
+    Hotoke       = new Hotoke()
+    Parent       = new Parent()
+    Child        = new Child()
+    Grandson     = new Grandson()
+    @pageCursor  = 1
+    @data        = []
+    @obj         = {}
+    @page        = null
 
 
   start: (page)=>
@@ -75,6 +77,7 @@ class Text
     if @page is 'hotoke' then p = 'od6'
     if @page is 'parent' then p = '2'
     if @page is 'child' then p = '3'
+    if @page is 'grandson' then p = '4'
 
     opts = url: SCOPE + '/cells/' + spreadsheetsKey + '/'+p+'/private/basic?alt=json'
     @auth.request opts, callback
@@ -94,6 +97,9 @@ class Text
 
     if @page is 'child'
       Child.value(err, body, res, entry, @generateObj)
+
+    if @page is 'grandson'
+      Grandson.value(err, body, res, entry, @generateYaml)
 
   generateObj: (key, value)=>
     @obj[key] = value

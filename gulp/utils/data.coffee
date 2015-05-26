@@ -1,7 +1,8 @@
-path        = require 'path'
-hotokeJson  = require '../data/hotoke.json'
-parentJson  = require '../data/parent.json'
-childJson  = require '../data/child.json'
+path          = require 'path'
+hotokeJson    = require '../data/hotoke.json'
+parentJson    = require '../data/parent.json'
+childJson     = require '../data/child.json'
+grandsonJson  = require '../data/grandson.json'
 
 
 p = 0
@@ -34,10 +35,11 @@ module.exports = (file, url, ID) ->
 
 
   data =
-    hotoke: hotokeJson
-    parent: parentJson
-    child:  childJson
-    currentUrl: url
+    hotoke     : hotokeJson
+    parent     : parentJson
+    child      :  childJson
+    grandson   : grandsonJson
+    currentUrl : url
     id: ID
     root: ori
 

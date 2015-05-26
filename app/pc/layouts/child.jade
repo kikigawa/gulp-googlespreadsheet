@@ -6,10 +6,10 @@ block main
   - var id         = locals.id
   - var items      = locals.child.child[parent][id]
   - var item       = Object.keys(items)
-  h3 currentUrl = #{currentUrl}
-  h3 parent = #{parent}
-  h3 ID = #{id}
-  h3 item = #{item}
+  p currentUrl = #{currentUrl}
+  p parent = #{parent}
+  p ID = #{id}
+  p item = #{item}
 
   each index, i in item
     a(href="./#{index}/" style="display:block; margin-top:50px;")

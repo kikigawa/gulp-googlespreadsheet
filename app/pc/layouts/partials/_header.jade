@@ -1,10 +1,12 @@
 - var parents = Object.keys(locals.parent.parent)
-- var currentUrl = locals.root
+- var currentUrl = locals.currentUrl
+- var root = locals.root
 
 
 header
-  h3 ヘッダー
-  h3 #{currentUrl}
+  p ヘッダー
+  p #{currentUrl}
+  p root = #{root}
   //- h3 #{relative}
   a(href="#{root}") top
   each index, n in parents
