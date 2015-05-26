@@ -32,16 +32,36 @@ module.exports = (file, url, ID) ->
       i++
 
 
+  pankz = url.split('/')
+  pankz.splice(-1, 1)
+  # console.log pankz
+  pankzTmp = ''
+  pankzArr = []
+  for i in [0..pankz.length-1]
+    if pankz[i]
+      pankzTmp = pankzTmp+'/'+pankz[i]
+      pankzArr.push(pankzTmp)
+      console.log "pankz[][][]"
+      console.log pankzArr
+      console.log "pankz[][][]"
+
+  
+
+
+
 
 
   data =
     hotoke     : hotokeJson
     parent     : parentJson
-    child      :  childJson
+    child      : childJson
     grandson   : grandsonJson
     currentUrl : url
     id: ID
     root: ori
+    pankz: pankzArr
+    pankzName : pankz
+
 
 
 

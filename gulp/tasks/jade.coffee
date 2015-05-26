@@ -114,11 +114,6 @@ gulp.task 'grandson', (cb)->
     else if imGgrandson >= 0
       dir = myP[imGgrandson]+'/'
 
-
-    console.log '++++++++++++++++'
-    console.log dir
-    console.log '++++++++++++++++'
-    # format = grandsonJson.lists[id].format
     a = path.forApp
     b = path.forBuild
     gulp.src('./app'+a+'layouts/detail-noChild.jade')

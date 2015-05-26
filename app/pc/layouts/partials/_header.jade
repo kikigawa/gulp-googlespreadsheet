@@ -1,14 +1,28 @@
 - var parents = Object.keys(locals.parent.parent)
 - var currentUrl = locals.currentUrl
 - var root = locals.root
+- var pankz = locals.pankz
+- var pankzName = locals.pankzName
+- var pankzLng = pankz.length
+
 
 
 header
   p ヘッダー
   p #{currentUrl}
   p root = #{root}
-  //- h3 #{relative}
   a(href="#{root}") top
   each index, n in parents
     a(href="#{root}#{index}" style="margin-left:30px;") #{index}
+  if currentUrl
+    #panks
+      p #{pankzLng}
+      a(href="#{root}") HOME
+      each index, n in pankz
+        if n < pankzLng-1
+          a(href="#{root}#{index}" style="margin-left:10px;") #{pankzName[n]}
+        else
+          span(style="margin-left:10px;") #{pankzName[n]}
+
+
 
