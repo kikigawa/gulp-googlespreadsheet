@@ -2,7 +2,7 @@ extends partials/_frame
 block main
   h1 PARENT
   - var id = locals.id
-  - var items = locals.parent.parent[id]
+  - var items = locals.parent.parent[id].lists
   - var item = Object.keys(items)
 
   each index, n in item

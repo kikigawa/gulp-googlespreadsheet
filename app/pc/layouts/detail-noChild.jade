@@ -1,13 +1,11 @@
 extends partials/_frame
 block main
   h1 GRANDSON NO CHILD
-  - var currentUrl = locals.currentUrl
   - var id         = locals.id
   - var root       = locals.root
   - var item       = locals.grandson.lists[id]
   - var title      = item.title
   - var elements   = item.elements
-  p currentUrl = #{currentUrl}
   p id = #{id}
   p #{title}
 

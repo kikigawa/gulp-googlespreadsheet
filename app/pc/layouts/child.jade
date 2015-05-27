@@ -1,10 +1,10 @@
 extends partials/_frame
 block main
   h1 CHILD
-  - var currentUrl = locals.currentUrl
+  //- - var currentUrl = locals.currentUrl
   - var parent     = currentUrl.split('/')[0]
   - var id         = locals.id
-  - var items      = locals.child.child[parent][id]
+  - var items      = locals.child.child[parent][id].lists
   - var item       = Object.keys(items)
   p currentUrl = #{currentUrl}
   p parent = #{parent}

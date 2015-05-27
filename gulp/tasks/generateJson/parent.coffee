@@ -34,9 +34,12 @@ class Parent
             items[parent] = {}
 
           when 'B'
-            item = {}
+            value = dir.content.$t
+            items[parent].title = value
+            items[parent].lists = {}
 
           when 'C'
+            item = {}
             value = dir.content.$t
             item.tag = value
 
@@ -52,7 +55,7 @@ class Parent
             value = dir.content.$t
             item.id = value
 
-            items[parent][item.id] = item
+            items[parent].lists[item.id] = item
     callback('parent', items)
 
 

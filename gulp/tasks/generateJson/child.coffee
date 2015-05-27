@@ -35,13 +35,15 @@ class Child
             items[parent][child] = {}
 
           when 'C'
-            item = {}
+            value = dir.content.$t
+            items[parent][child].title = value
+            items[parent][child].lists = {}
 
           when 'D'
-            value = dir.content.$t
-            item.tag = value
+            console.log 'D'
 
           when 'E'
+            item = {}
             value = dir.content.$t
             item.title = value
 
@@ -53,7 +55,7 @@ class Child
             value = dir.content.$t
             item.id = value
 
-            items[parent][child][item.id] = item
+            items[parent][child].lists[item.id] = item
     callback('child', items)
 
 
