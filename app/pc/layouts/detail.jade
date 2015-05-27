@@ -1,13 +1,20 @@
 extends partials/_frame
 block main
-  h1 GRANDSON NO CHILD
+  h1 DETAIL
   - var id         = locals.id
   - var root       = locals.root
   - var item       = locals.grandson.lists[id]
   - var title      = item.title
   - var elements   = item.elements
   p id = #{id}
-  p #{title}
+  p root = #{root}
+  p item = #{item}
+  p title = #{title}
+  p elements = #{elements}
+
+
+  //- p id = #{id}
+  //- p #{title}
 
   each index, i in elements
     if index.type == 'image'

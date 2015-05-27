@@ -21,9 +21,6 @@ gulp.task 'watch', ['default'],  ->
 
 gulp.task 'text', ->
   text = new Text()
-  console.log '@@@@@@@@'
-  console.log page
-  console.log '@@@@@@@@'
 
   text.start(page)
   # runSequence 'text'

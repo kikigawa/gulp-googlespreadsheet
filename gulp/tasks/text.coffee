@@ -36,6 +36,8 @@ class Text
     @data        = []
     @obj         = {}
     @page        = null
+    @detailParentArr = []
+    @detailChildArr = []
 
 
   start: (page)=>
@@ -73,14 +75,16 @@ class Text
   getListRow: (callback)=>
     console.log 'getListRow'
     spreadsheetsKey = '10RLsfmzuHnIpV21jtwKfw5m0OpmZ2mvOaTUkPexdO5U'
+    p = []
+    if @page is 'hotoke' then p.push('od6')
+    if @page is 'parent' then p.push('2')
+    if @page is 'child' then p.push('3')
+    if @page is 'grandson' then p.push('4','5')
 
-    if @page is 'hotoke' then p = 'od6'
-    if @page is 'parent' then p = '2'
-    if @page is 'child' then p = '3'
-    if @page is 'grandson' then p = '4'
 
-    opts = url: SCOPE + '/cells/' + spreadsheetsKey + '/'+p+'/private/basic?alt=json'
-    @auth.request opts, callback
+    for i in [0..p.length-1]
+      opts = url: SCOPE + '/cells/' + spreadsheetsKey + '/'+p[i]+'/private/basic?alt=json'
+      @auth.request opts, callback
 
 
 
@@ -99,7 +103,7 @@ class Text
       Child.value(err, body, res, entry, @generateObj)
 
     if @page is 'grandson'
-      Grandson.value(err, body, res, entry, @generateYaml)
+      Grandson.value(err, body, res, entry, @generateDetailsYaml)
 
   generateObj: (key, value)=>
     @obj[key] = value
@@ -121,6 +125,23 @@ class Text
       console.log 'Generated text!'
     )
 
+
+
+  generateDetailsYaml: (data)=>
+    parent = data.common.parent
+    child =  data.common.child
+
+    fs.writeFile('./gulp/data/'+@page+'_'+parent+'_'+child+'.json', JSON.stringify(data), ->
+      console.log 'Generated text!'
+    )
+    fs.writeFile('./gulp/data/'+@page+'_'+parent+'_'+child+'.yml', yaml.stringify(data), ->
+      console.log 'Generated text!'
+    )
+
+    @detailParentArr.push(parent)
+    @detailChildArr.push(child)
+    console.log @detailParentArr
+    console.log @detailChildArr
 
 
 

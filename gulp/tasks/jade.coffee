@@ -9,33 +9,51 @@ jade        = require 'gulp-jade'
 rename      = require 'gulp-rename'
 bSync       = require './browserSync'
 merge       = require('merge-stream')
+fs = require('fs')
 
 parentJson  = require '../data/parent.json'
 childJson  = require '../data/child.json'
-grandsonJson  = require '../data/grandson.json'
+# grandsonJson  = require '../data/grandson.json'
 
-@a = null
-@b = null
+
+a = null
+b = null
+
+grandsonFileList = []
 
 gulp.task 'jade', (cb)->
-  @a = path.forApp
-  @b = path.forBuild
-  runSequence 'hotoke', 'parent', 'child', 'grandson', cb
+  a = path.forApp
+  b = path.forBuild
+  runSequence 'checkJson', 'hotoke', 'parent', 'child', 'grandson', cb
+
+
+gulp.task 'checkJson', (cb)->
+  #Grandson*.jsonを取得
+  jsonDir = './gulp/data/'
+  fs.readdir jsonDir, (err, files) ->
+    if err
+      throw err
+
+    files.filter((file) ->
+      fs.statSync(jsonDir+file).isFile() and /grandson.*\.json$/.test(file)
+    ).forEach (file) ->
+      grandsonFileList.push file
+      return
+    cb()
 
 
 
 gulp.task 'hotoke',  (cb)->
-  gulp.src('./app'+@a+'layouts/index.jade')
+  gulp.src('./app'+a+'layouts/index.jade')
     .pipe plumber()
     .pipe data (file) ->
       dp  = '../utils/data.coffee'
       out = require(dp)(file, '', '')
       return out
-      # return require '../data/hotoke.json'
     .pipe jade
       pretty: true
     .on "error", gutil.log
-    .pipe gulp.dest('./build/'+@b)
+    .pipe gulp.dest('./build/'+b)
     .pipe bSync.reload stream: true
   cb()
 
@@ -89,48 +107,48 @@ gulp.task 'child', (cb)->
 
 
 
+
 gulp.task 'grandson', (cb)->
-  parent    = grandsonJson.common.parent
-  child     = grandsonJson.common.child
-  gGrandsons = grandsonJson.common.gGrandsons
+  console.log '+++++++++++++++++++++++'
+  console.log grandsonFileList
+  console.log '+++++++++++++++++++++++'
 
-  # console.log '===========gGrandsons=========='
-  # console.log gGrandsons.length
-  # console.log '===========gGrandsons=========='
-  me  = []
-  myP = []
-  for i in [0..gGrandsons.length-1]
-    me.push(gGrandsons[i].me)
-    myP.push(gGrandsons[i].parent)
-  console.log me
-  console.log myP
+  merge grandsonFileList.map (name, i) ->
 
-  dirArr = Object.keys(grandsonJson.lists)
-  merge dirArr.map (id, i) ->
-    imGgrandson = me.indexOf(id)
 
-    if imGgrandson < 0
-      dir = ''
-    else if imGgrandson >= 0
-      dir = myP[imGgrandson]+'/'
+    json = require '../data/'+grandsonFileList[i]
+    parent    = json.common.parent
+    child     = json.common.child
+    gGrandsons = json.common.gGrandsons
 
-    a = path.forApp
-    b = path.forBuild
-    gulp.src('./app'+a+'layouts/detail-noChild.jade')
-      .pipe plumber()
-      .pipe data (file) ->
-        dp  = '../utils/data.coffee'
-        out = require(dp)(file, parent+'/'+child+'/'+dir+id+'/', id)
-        return out
-      .pipe jade
-        pretty: true
-      .on "error", gutil.log
-      .pipe rename('index.html')
-      .pipe gulp.dest('./build/'+parent+'/'+child+'/'+dir+id)
-      .pipe bSync.reload stream: true
+    me  = []
+    myParent = []
+    for i in [0..gGrandsons.length-1]
+      me.push(gGrandsons[i].me)
+      myParent.push(gGrandsons[i].parent)
 
+    dirArr = Object.keys(json.lists)
+    console.log dirArr
+    merge dirArr.map (id, i) ->
+      imGgrandson = me.indexOf(id)
+
+      if imGgrandson < 0
+        dir = ''
+      else if imGgrandson >= 0
+        dir = myParent[imGgrandson]+'/'
+
+      a = path.forApp
+      b = path.forBuild
+      gulp.src('./app'+a+'layouts/detail.jade')
+        .pipe plumber()
+        .pipe data (file) ->
+          dp  = '../utils/data.coffee'
+          out = require(dp)(file, parent+'/'+child+'/'+dir+id+'/', id, json)
+          return out
+        .pipe jade
+          pretty: true
+        .on "error", gutil.log
+        .pipe rename('index.html')
+        .pipe gulp.dest('./build/'+parent+'/'+child+'/'+dir+id)
+        .pipe bSync.reload stream: true
   cb()
-
-
-
-

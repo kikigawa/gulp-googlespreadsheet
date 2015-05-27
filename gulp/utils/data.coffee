@@ -1,15 +1,19 @@
 path          = require 'path'
+fs          = require 'fs'
 hotokeJson    = require '../data/hotoke.json'
 parentJson    = require '../data/parent.json'
 childJson     = require '../data/child.json'
-grandsonJson  = require '../data/grandson.json'
+# grandsonJson  = require '../data/grandson_info_message.json'
 
 
 p = 0
 c = 0
 
 
-module.exports = (file, url, ID) ->
+module.exports = (file, url, ID, json) ->
+  if json
+    grandsonJson = json
+
 
   tmp = String(file.history).split('/')
   layout = tmp[tmp.length-1].split('.')[0]
@@ -40,6 +44,8 @@ module.exports = (file, url, ID) ->
   for i in [0..pankz.length-1]
     if pankz[i]
       pankzTmp = pankzTmp+'/'+pankz[i]
+      if pankzTmp.charAt(0) is '/'
+        pankzTmp = pankzTmp.substr(1)
       pankzArr.push(pankzTmp)
 
 
@@ -61,16 +67,23 @@ module.exports = (file, url, ID) ->
       if i is 3
         name = grandsonJson.lists[pankz[3]].title
         pankzName.push(name)
-    console.log '================================='
-    console.log pankz
-    console.log pankzName
-    console.log '================================='
 
 
 
 
 
 
+  # jsonDir = './gulp/data/'
+  # fs.readdir jsonDir, (err, files) ->
+  #   if err
+  #     throw err
+  #   grandsonFileList = []
+  #   files.filter((file) ->
+  #     fs.statSync(jsonDir+file).isFile() and /grandson.*\.json$/.test(file)
+  #   ).forEach (file) ->
+  #     grandsonFileList.push file
+  #     return
+  #   console.log grandsonFileList
 
 
 
@@ -86,6 +99,7 @@ module.exports = (file, url, ID) ->
     root: ori
     pankz: pankzArr
     pankzName : pankzName
+    # test: grandsonFileList
 
 
 
